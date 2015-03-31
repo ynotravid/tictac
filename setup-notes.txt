@@ -1,0 +1,14 @@
+Setup svn like updates using the git --rebase option.  The following command will make it the default when doing a git pull:
+git config --global branch.autosetuprebase always
+
+To do a git pull you can do this:
+git checkout master
+git pull --rebase origin
+
+
+
+Setup Node.js
+
+when node.js is installed install all required npm modules by running 'npm install' in the same directory as the package.json file.
+
+
