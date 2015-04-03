@@ -11,4 +11,12 @@ Setup Node.js
 
 when node.js is installed install all required npm modules by running 'npm install' in the same directory as the package.json file.
 
+To start mongo db:  mongod &
+NOTE: you may need to create /data/db for mongo to start
+
+
+
+
+
+
 
