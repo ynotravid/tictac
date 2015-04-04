@@ -5,6 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// These models must be registered before routes is loaded.
+var mongoose = require('mongoose');
+require('./models/Posts');
+require('./models/Comments');
+
+// Routes must be loaded after mongoose models have been registered.
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -57,4 +63,8 @@ app.use(function(err, req, res, next) {
 });
 
 
+mongoose.connect('mongodb://localhost/news');
+
 module.exports = app;
+
+

@@ -10,7 +10,12 @@ app.config([
 			{
 				url: '/home',
 				templateUrl: '/home.html',
-				controller: 'MainCtrl'
+				controller: 'MainCtrl',
+				resolve: {
+					postPromise: ['posts', function(posts) {
+						return posts.getAll();
+					}]
+				}
 			}
 		).state(
 			'posts',
@@ -23,17 +28,29 @@ app.config([
 		$urlRouterProvider.otherwise('home');
 	}
 ])
-.factory('posts', [function(){
+.factory('posts', ['$http',function($http){
 	var o = {
 		'posts': [
-			{'title': 'post 1', 'upvotes':5},
-			{'title': 'post 2', 'upvotes':2},
-			{'title': 'post 3', 'upvotes':15},
-			{'title': 'post 4', 'upvotes':9},
-			{'title': 'post 5', 'upvotes':4},
+	//		{'title': 'post 1', 'upvotes':5},
+	//		{'title': 'post 2', 'upvotes':2},
+	//		{'title': 'post 3', 'upvotes':15},
+	//		{'title': 'post 4', 'upvotes':9},
+	//		{'title': 'post 5', 'upvotes':4}
 		]
-
 	};
+
+	o.getAll = function() {
+		return $http.get('/posts').success(function(data){
+			angular.copy(data, o.posts);
+		});
+	};
+
+	o.create = function(post) {
+		return $http.post('/posts', post).success(function(data){
+			o.posts.push(data);
+		});
+	};
+
 	return o;
 }])
 .controller('MainCtrl', ['$scope', 'posts',
@@ -41,27 +58,36 @@ app.config([
 		$scope.title = 'Hello there';
 		$scope.posts = posts.posts;
 
-		$scope.addPost = function(post) {
-			if (!$scope.title) {return;}
-			$scope.posts.push({
-				title: $scope.title, 
-				link: $scope.link,
-				upvotes: 0
+//		$scope.addPost = function(post) {
+//			if (!$scope.title) {return;}
+//			$scope.posts.push({
+//				title: $scope.title,
+//				link: $scope.link,
+//				upvotes: 0
+//			});
+//			$scope.title = '';
+//			$scope.link = '';
+//
+//$scope.posts.push({
+//  title: $scope.title,
+//  link: $scope.link,
+//  upvotes: 0,
+//  comments: [
+//    {author: 'Joe', body: 'Cool post!', upvotes: 0},
+//    {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
+//  ]
+//});
+//
+//
+//		};
+		$scope.addPost = function(){
+			if(!$scope.title) { return; }
+			posts.create({
+				title: $scope.title,
+				link: $scope.link
 			});
 			$scope.title = '';
 			$scope.link = '';
-
-$scope.posts.push({
-  title: $scope.title,
-  link: $scope.link,
-  upvotes: 0,
-  comments: [
-    {author: 'Joe', body: 'Cool post!', upvotes: 0},
-    {author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
-  ]
-});
-
-
 		};
 
 		$scope.incrementUpvotes = function(post) {
