@@ -7,8 +7,11 @@ var bodyParser = require('body-parser');
 
 // These models must be registered before routes is loaded.
 var mongoose = require('mongoose');
+var passport = require('passport');
 require('./models/Posts');
 require('./models/Comments');
+require('./models/Users');
+require('./config/passport'); //<- must be after Users model
 
 // Routes must be loaded after mongoose models have been registered.
 var routes = require('./routes/index');
@@ -30,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+app.use(passport.initialize()); // <- should be after express.static
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
