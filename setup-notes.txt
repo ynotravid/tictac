@@ -5,14 +5,14 @@ To do a git pull you can do this:
 git checkout master
 git pull --rebase origin
 
+# START THE APP
 
+Install Node.js (I use homebrew for mac but on any platform you can just install from the website)
+ - when node.js is installed install all required npm modules by running 'npm install' in the same directory as the package.json file.
 
-Setup Node.js
-
-when node.js is installed install all required npm modules by running 'npm install' in the same directory as the package.json file.
-
-To start mongo db:  mongod &
-NOTE: you may need to create /data/db for mongo to start
+# START mongodb
+To start mongo db use this command:  mongod &
+NOTE: you may need to create the directory /data/db for mongo to start
 
 
 
